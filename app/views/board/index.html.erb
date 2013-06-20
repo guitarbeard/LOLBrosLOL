@@ -1,0 +1,56 @@
+<div class='container-fluid'>
+	<div class='row-fluid'>
+		<a href="#myModal" role="button"  data-toggle="modal" class='btn btn-primary btn-large span12'>Create New Thread</a>	
+		<hr style='width:100%;'>
+	</div>
+	<div class='row-fluid'>
+		
+		<div id='all_threads' class='well'>
+			<%@topics.each do |t|%>
+				<div id='thread<%=t.id%>' class='thread'>
+					<div class='thread_name btn btn-link' thread_id='<%=t.id%>'><%=t.name%></div>
+ 					 <div><strong>- <%=t.user.name%> </strong><br class='visible-phone'>
+            <%Time.zone = "Pacific Time (US & Canada)"%> 
+						<%= Time.zone.parse(t.created_at.to_s).strftime("%b %d %Y at %I:%M %p")%><br class='visible-phone'> |
+            <strong><%=t.posts.count%></strong> posts |
+            <strong><%=t.views%></strong> views
+            <% if t.user.id == session[:id] %>
+            |<div thread_id='<%=t.id%>' class='edit_thread btn btn-link'>Edit</div>
+            <%end%>
+					</div>
+				</div>
+        <hr>
+			<%end%>
+		</div>
+	</div>
+</div>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Create New Thread</h3>
+  </div>
+  <div class="modal-body">
+    <p><input id='thread_name' placeholder='Thread Name' type='text'></p>
+    <p><textarea id='first_post' placeholder='Type your first post here...'></textarea></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button id='submit_thread' class="btn btn-primary">Create Thread</button>
+  </div>
+</div>
+
+<div id="editThread" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Edit Thread Name</h3>
+  </div>
+  <div class="modal-body">
+    <p><input id='edit_thread_name' type='text'></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button id='edit_thread_btn' class="btn btn-primary">Edit Thread</button>
+  </div>
+</div>

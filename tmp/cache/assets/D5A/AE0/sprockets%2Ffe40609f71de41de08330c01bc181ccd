@@ -1,0 +1,268 @@
+o: ActiveSupport::Cache::Entry	:@compressedF:@value"/{"_version"%9f3b95dd7ea3030dc35985c0a8020862"required_paths["-$root/app/assets/javascripts/home.js.erb"
+mtime"2013-03-18T04:23:34+00:00"dependency_paths[{"
+mtime"2013-03-18T04:23:34+00:00"	path"-$root/app/assets/javascripts/home.js.erb"digest"%87d8b59bcc1ba2821c582ccf9496f4cd"source"$(document).ready(function() {
+	$('#sign_in').fastClick(function(e){
+		e.preventDefault();
+		var name = $('#name').val();
+		var password = $('#password').val();
+		$.post('/home/attempt_login', {name: name, password: password}, function(output){
+			if(!output.success){
+				alert(output.message);
+			}else{
+				window.location = "/board"
+			}
+		});
+		return false;
+	});
+
+	$('#sign_up').fastClick(function(e){
+		e.preventDefault();
+		var name = $('#signup_name').val();
+		var password = $('#signup_password').val();
+		var img_src = $('#signup_img_src').val();
+		var email = $('#signup_email').val();
+		if(name && password && img_src && email){
+			$.post('/signup/signup', {name: name, password: password, email: email, img_src: img_src}, function(output){
+				if(!output.success){
+					alert(output.message);
+				}else{
+					window.location = "/board"
+				}
+			});
+		}else{
+			alert('You must fill in all fields')
+		}
+		
+		return false;
+	});
+
+	$('.thread_name').fastClick(function(e){
+		e.preventDefault();
+		var thread_id = $(this).attr('thread_id');
+		window.location = "/threads/" + thread_id; 	
+		return false;
+	})
+
+
+	$('.edit_thread').fastClick(function(e){
+		e.preventDefault();
+		var thread_id = $(this).attr('thread_id');
+		var old_name = $('#thread'+thread_id).find('.thread_name').html()
+		$('#edit_thread_name').val(old_name)
+		$('#editThread').modal()
+		
+		$('#edit_thread_btn').fastClick(function(){
+			var new_name = $('#edit_thread_name').val()
+			$.post('/board/edit_thread', {thread_id: thread_id, new_name: new_name}, function(output){
+				if(output.success){
+					$('#thread'+thread_id).find('.thread_name').html(output.name)
+					$('#editThread').modal('hide')
+				}
+			});
+
+			$(this).off()
+		})
+
+		return false;
+	})
+
+
+
+	$('#submit_thread').fastClick(function(e){
+		e.preventDefault();
+		var name = $('#thread_name').val();
+		var content = $('#first_post').val();
+
+		$.post('/board/create_topic', {name: name, content: content}, function(output){
+			if(!output.success){
+				alert(output.message);
+			}else{
+				window.location = "/threads/" + output.topic_id; 
+			}
+		});
+		return false;
+	});
+
+	$('.add_brofist').fastClick(function(e){
+		e.preventDefault();
+		var post_id = $(this).attr('post_id')
+		$.post('/topics/add_brofist', {post_id: post_id}, function(output){
+			if(output.success){
+				$('#post'+post_id).find('.post_content').append('<small fist_id="'+output.fist_id+'" class="fist_back btn btn-link">Brofisted by: '+output.giver_name+'</small>')
+
+				$('#post'+post_id).find('.add_brofist').remove()
+			}
+		});
+
+	})
+
+
+	$('.add_bitchslap').fastClick(function(e){
+		e.preventDefault();
+		var post_id = $(this).attr('post_id')
+		$.post('/topics/add_bitchslap', {post_id: post_id}, function(output){
+			if(output.success){
+				$('#post'+post_id).find('.post_content').append('<small slap_id="'+output.slap_id+'" class="slap_back btn btn-link">Bitchslapped by: '+output.giver_name+'</small>')
+				$('#post'+post_id).find('.add_bitchslap').remove()
+			}
+		});
+
+	})
+
+
+	$('.fist_back').fastClick(function(e){
+		e.preventDefault();
+		var fist_id = $(this).attr('fist_id')
+		$.post('/topics/remove_brofist', {fist_id: fist_id}, function(output){
+			if(output.success){
+				$('#fist'+fist_id).remove()
+			}
+		});
+
+	})
+
+	$('.slap_back').fastClick(function(e){
+		e.preventDefault();
+		var slap_id = $(this).attr('slap_id')
+		$.post('/topics/remove_bitchslap', {slap_id: slap_id}, function(output){
+			if(output.success){
+				$('#slap'+slap_id).remove()
+			}
+		});
+
+	})
+
+	$('#submit_post').fastClick(function(e){
+		e.preventDefault();
+		var thread_id = $(this).attr('thread_id')
+
+		var content = $('#post').val();
+
+		$.post('/topics/create_post', {thread_id: thread_id, content: content}, function(output){
+			if(!output.success){
+				alert(output.message);
+			}else{
+				var user = output.user;
+				var post = output.post;
+
+				$('#all_posts').append("<div class='post row-fluid' id='post"+post.id+"'>\
+				  							<li class='span3'>\
+				    							<div class='thumbnail'>\
+				    			 	 				<img class='hidden-phone' src='"+user.img_src+"'>\
+				      								<h3>"+user.name+"</h3>\
+				      								<p>some stats...</p>\
+				    							</div>\
+				 							</li>\
+				 	 						<li class='span9'>\
+				    							<div class='thumbnail post_content'>\
+				      								<p>"+post.content+"</p>\
+				      								<hr style='margin-bottom:5px!important;'>\
+				      								<small>"+output.post_date+"</small>\
+				      								<div post_id='"+post.id+"' class='edit_post btn btn-link'>Edit</div>\
+				    							</div>\
+				  							</li>\
+										</div>");
+				$('#post'+post.id).find('.edit_post').fastClick(function(){
+					var post_id = $(this).attr('post_id');
+					var old_post = $('#post'+post_id).find('.post_content').find('p').html()
+					$('#post_edit').val(old_post)
+					$('#editPost').modal()
+					$('#edit_post_btn').fastClick(function(){
+						var content = $('#post_edit').val()
+						$.post('/topics/edit_post', {post_id: post_id, content: content}, function(output){
+							if(output.success){
+								$('#post'+post_id).find('.post_content').find('p').html(output.new_content)
+								$('#editPost').modal('hide')
+							}
+						});
+
+						$(this).off()
+					})
+
+					return false;
+				})
+
+				$('#myModal').modal('hide');
+			}
+		});
+
+		$('#post').val('')
+
+		return false;
+	});
+
+	var profile = Raphicon({icon:'profile', width:12, height:14, fill:"#999", float:'right', margin:'4px 0 0 5px'})
+	var board = Raphicon({icon:'board', width:12, height:12, fill:"#999", float:'right', margin:'0 0 0 5px'})
+	var skull = Raphicon({icon:'skull', width:12, height:12, fill:"#999", float:'right', margin:'0 0 0 5px'})
+	var plus = Raphicon({icon:'plus',  fill:"#fff", float:'left', height:30, width:30, margin:'4px 0 0 5px'})
+
+	$('#profile_link').append(profile)
+	$('#board_link').append(board)
+	$('#logout_link').append(skull)
+	$('#add_post').append(plus)
+
+	$('#add_post').hover(function(){
+		$(this).animate({right:'0px', queue:false}, 200)
+	}, function(){
+		$(this).animate({right:'-50px', queue:false}, 200)
+	})
+
+
+	$('.edit_post').fastClick(function(){
+		var post_id = $(this).attr('post_id');
+		var old_post = $('#post'+post_id).find('.post_content_text').text()
+		$('#post_edit').val(old_post)
+		$('#editPost').modal()
+		$('#edit_post_btn').fastClick(function(){
+			var content = $('#post_edit').val()
+			$.post('/topics/edit_post', {post_id: post_id, content: content}, function(output){
+				if(output.success){
+					$('#post'+post_id).find('.post_content_text').html(content.replace(/\n/g, '<br>'))
+					$('#editPost').modal('hide')
+				}
+			});
+
+			$(this).off()
+		})
+
+		return false;
+	})
+
+
+	$('#update_profile').fastClick(function(e){
+		e.preventDefault()
+		var new_name = $('#profile_name').val()
+		var new_email = $('#profile_email').val()
+		var new_avatar_url = $('#profile_avatar_url').val()
+		$.post('/profile/update_profile', {new_name: new_name, new_email: new_email, new_avatar_url: new_avatar_url}, function(output){
+			if(output.success){
+				 $('#profile_pic').attr('src', output.user.img_src)
+				 $('#header_username').html(output.user.name)
+			}
+		});
+
+
+	})
+
+	$('#update_password').fastClick(function(e){
+		e.preventDefault()
+		
+		var new_password = $('#profile_password').val()
+
+		if(new_password != ''){
+			$.post('/profile/update_password', {new_password: new_password}, function(output){
+				if(output.success){
+					 $('#profile_password').val('')
+				}
+			});
+
+		}
+
+
+	})
+
+
+
+});
+"lengthi"logical_path"home.js"pathname"-$root/app/assets/javascripts/home.js.erb"
+class"ProcessedAsset"dependency_digest"%3a5451cc5b8852b22d069f88d7c7b2ca"content_type"application/javascript"digest"%0399ee42efd21e250b00aa96ec070356:@created_atf1363580615.3326609 JQ:@expires_in0

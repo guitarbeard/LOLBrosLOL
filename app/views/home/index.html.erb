@@ -1,0 +1,26 @@
+<script>
+$(function(){
+	<% if session[:id]%>
+		window.location = '/board'
+
+	<%end%>
+})
+</script>
+
+<style>
+body{
+	padding-top:40px!important;
+}
+</style>
+
+<div class='container-fluid'>
+	<h1 class='signup_header text-center'>LOL Bros, LOL</h1><p class='text-center'>(Now beta testing)</p>
+	<div class='form-signin'>
+	    <h2 class="form-signin-heading">Please sign in</h2>
+		<input id='name' type='text' placeholder='Username'>
+		<input id='password' type='password' placeholder='Password'>
+		<div id='sign_in' class='btn btn-large btn-primary'>Log In</div>
+		<hr>
+		<p>New around these parts? <a href='/signup'>Sign up!</a></p>
+	</div>
+</div>

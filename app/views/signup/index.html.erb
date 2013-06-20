@@ -1,0 +1,29 @@
+<script>
+$(function(){
+	<% if session[:id]%>
+		window.location = '/board'
+
+	<%end%>
+})
+</script>
+
+<style>
+body{
+	padding-top:40px!important;
+}
+</style>
+
+<div class='container-fluid'>
+	<h1 class='signup_header text-center'>LOL Bros, LOL</h1><p class='text-center'>(Now beta testing)</p>
+
+	<div class='form-signin'>
+	    <h2 class="form-signin-heading">Sign up!</h2>
+		<input id='signup_name' type='text' placeholder='Username'>
+		<input id='signup_password' type='password' placeholder='Password'>
+		<input id='signup_email' type='email' placeholder='you@lolbros.com'>
+		<input id='signup_img_src' type='text' placeholder='url for avatar image'>
+		<div id='sign_up' class='btn btn-large btn-primary'>Submit</div>
+		<hr>
+		<p>I've been here before. <a href='/'>Sign in</a></p>
+	</div>
+</div>
