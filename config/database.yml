@@ -23,7 +23,7 @@ development:
 #   host: 36d907dcd3e499d314010e0122c9e1fb45818d90.rackspaceclouddb.com
 #   adapter: mysql2
 #   encoding: utf8
-#   reconnect: false
+#   reconnect: false 
 #   database: alex
 #   pool: 5
 #   username: cookiepages
