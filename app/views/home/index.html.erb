@@ -13,13 +13,22 @@ body{
 }
 </style>
 
-<div class='container-fluid'>
+<div class='container'>
 	<h1 class='signup_header text-center'>LOL Bros, LOL</h1><p class='text-center'>(Now beta testing)</p>
 	<div class='form-signin'>
 	    <h2 class="form-signin-heading">Please sign in</h2>
-		<input id='name' type='text' placeholder='Username'>
-		<input id='password' type='password' placeholder='Password'>
-		<div id='sign_in' class='btn btn-large btn-primary'>Log In</div>
+	    <br>
+	    <div class="input-group">
+	    	<span class='input-group-addon'><span class="glyphicon glyphicon-user"></span></span>
+		    <input type="email" class="form-control" id="name" placeholder="Username">
+		</div>
+		<br>
+		<div class="input-group">
+			<span class='input-group-addon'><span class="glyphicon glyphicon-lock"></span></span>
+		    <input type="password" class="form-control" id="password" placeholder="Password">
+		</div>	
+		<br>
+		<button id='sign_in' class='btn btn-lg btn-primary'>Log In</button>
 		<hr>
 		<p>New around these parts? <a href='/signup'>Sign up!</a></p>
 	</div>

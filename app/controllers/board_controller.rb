@@ -1,6 +1,6 @@
 class BoardController < ApplicationController
 	def index
-		@topics = Topic.limit(20).find(:all, :order => 'created_at DESC')
+		@topics = Topic.limit(20).find(:all, :order => 'updated_at DESC')
 
 	end
 

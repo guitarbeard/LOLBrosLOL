@@ -13,17 +13,33 @@ body{
 }
 </style>
 
-<div class='container-fluid'>
+<div class='container'>
 	<h1 class='signup_header text-center'>LOL Bros, LOL</h1><p class='text-center'>(Now beta testing)</p>
-
-	<div class='form-signin'>
+	<div class='form-signin form-signup'>
 	    <h2 class="form-signin-heading">Sign up!</h2>
-		<input id='signup_name' type='text' placeholder='Username'>
-		<input id='signup_password' type='password' placeholder='Password'>
-		<input id='signup_email' type='email' placeholder='you@lolbros.com'>
-		<input id='signup_img_src' type='text' placeholder='url for avatar image'>
+	    <br>
+	    <div class="input-group">
+	    	<span class='input-group-addon'><span class="glyphicon glyphicon-user"></span></span>
+		    <input id='signup_name' class="form-control" type='text' placeholder='Username'>
+		</div>
+		<br>
+		<div class="input-group">
+			<span class='input-group-addon'><span class="glyphicon glyphicon-lock"></span></span>
+		    <input type="password" class="form-control" id="signup_password" placeholder="Password">
+		</div>	
+		<br>
+		<div class="input-group">
+			<span class='input-group-addon'><span class="glyphicon glyphicon-envelope"></span></span>
+		    <input id='signup_email' class="form-control" type='text' placeholder='you@lolbros.com'>
+		</div>
+		<br>
+		<div class="input-group">
+			<span class='input-group-addon'><span class="glyphicon glyphicon-picture"></span></span>
+		    <input type="text" id="signup_img_src" class="form-control" placeholder="url for avatar image">
+		</div>
+		<br>	
 		<div id='sign_up' class='btn btn-large btn-primary'>Submit</div>
 		<hr>
-		<p>I've been here before. <a href='/'>Sign in</a></p>
+		<p>hmm... I've been here before. <a href='/'>Sign in</a></p>
 	</div>
 </div>

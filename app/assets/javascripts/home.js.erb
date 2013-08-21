@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	$('#sign_in').fastClick(function(e){
-		e.preventDefault();
+
+	function login(){
 		var name = $('#name').val();
 		var password = $('#password').val();
 		$.post('/home/attempt_login', {name: name, password: password}, function(output){
@@ -10,11 +10,9 @@ $(document).ready(function() {
 				window.location = "/board"
 			}
 		});
-		return false;
-	});
+	}
 
-	$('#sign_up').fastClick(function(e){
-		e.preventDefault();
+	function signup (argument) {
 		var name = $('#signup_name').val();
 		var password = $('#signup_password').val();
 		var img_src = $('#signup_img_src').val();
@@ -30,7 +28,29 @@ $(document).ready(function() {
 		}else{
 			alert('You must fill in all fields')
 		}
-		
+	}
+
+	$('.form-signin').find('input').keyup(function(e){
+		if(e.which == 13){
+			login()
+		}
+	})
+
+	$('.form-signup').find('input').keyup(function(e){
+		if(e.which == 13){
+			signup()
+		}
+	})
+
+	$('#sign_in').fastClick(function(e){
+		e.preventDefault();
+		login()
+		return false;
+	});
+
+	$('#sign_up').fastClick(function(e){
+		e.preventDefault();
+		signup()
 		return false;
 	});
 
@@ -143,22 +163,22 @@ $(document).ready(function() {
 				var user = output.user;
 				var post = output.post;
 
-				$('#all_posts').append("<div class='post row-fluid' id='post"+post.id+"'>\
-				  							<li class='span3'>\
+				$('#all_posts').append("<div class='post row' id='post"+post.id+"'>\
+				  							<div class='col-sm-3'>\
 				    							<div class='thumbnail'>\
 				    			 	 				<img class='hidden-phone' src='"+user.img_src+"'>\
 				      								<h3>"+user.name+"</h3>\
 				      								<p>some stats...</p>\
 				    							</div>\
-				 							</li>\
-				 	 						<li class='span9'>\
+				 							</div>\
+				 	 						<div class='col-sm-9'>\
 				    							<div class='thumbnail post_content'>\
 				      								<p>"+post.content+"</p>\
 				      								<hr style='margin-bottom:5px!important;'>\
 				      								<small>"+output.post_date+"</small>\
 				      								<div post_id='"+post.id+"' class='edit_post btn btn-link'>Edit</div>\
 				    							</div>\
-				  							</li>\
+				  							</div>\
 										</div>");
 				$('#post'+post.id).find('.edit_post').fastClick(function(){
 					var post_id = $(this).attr('post_id');
@@ -202,7 +222,7 @@ $(document).ready(function() {
 	$('#add_post').hover(function(){
 		$(this).animate({right:'0px', queue:false}, 200)
 	}, function(){
-		$(this).animate({right:'-50px', queue:false}, 200)
+		$(this).animate({right:'-30px', queue:false}, 200)
 	})
 
 

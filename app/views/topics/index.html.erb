@@ -1,107 +1,121 @@
-<div class='container-fluid'>
-	<div class='row-fluid'>
-		<div class='page-header'>
-			<h1><%=@topic.name%></h1>
-			<a id='add_post' href="#myModal" role="button"  data-toggle="modal" class='btn btn-primary pull-right'></a>		
-		</div>
-		<ul id='all_posts' class="thumbnails">
-			<%@posts.each do |p|%>
-
-			 <script>
-				$(function(){
-					var json = "<%= ActiveSupport::JSON.encode(p) %>".replace(/&quot;/g, "\"").replace(/\n/g, "<br>")
-					var post = $.parseJSON(json);
-					window['post'+post.id] = new Post(post);
-				})
-				
-			 </script>
-			<div class='post row-fluid' id='post<%=p.id%>'>
-			  <li class="span3 avatar">
-			    <div class="thumbnail">
-			      <img src="<%=p.user.img_src%>">
-			      <h3><%=p.user.name%></h3>
-			      <hr>
-			      <h6><%=p.user.posts.count%> posts <i class="icon-comment"></i> | </h6>
-			      <h6><%=p.user.brofists.count%> brofists <i class="icon-thumbs-up"></i> | </h6>
-			      <h6><%=p.user.bitchslaps.count%> bitchslaps <i class="icon-thumbs-down"></i></h6>
-			    </div>
-			  </li>
-			  <li class="span9">
-			    <div class="thumbnail post_content">
-			      <div class='post_content_text'><%=simple_format(p.content)%></div>
-			      <hr style='margin-bottom:5px!important;'>
-			      <small>
-			      	<%Time.zone = "Pacific Time (US & Canada)"%> 
-					<%= Time.zone.parse(p.created_at.to_s).strftime("%b %d %Y at %I:%M %p")%>
-			      </small>
-			      <% if p.user.id == session[:id] %>
-					<div post_id='<%=p.id%>' class='edit_post btn btn-link'>Edit</div>
-					<%end%>
-					 <% if p.user.id != session[:id] %>
-						<%if not Brofist.find_by_giver_id_and_post_id(session[:id], p.id)%>
-	  						<div post_id='<%=p.id%>' class='btn btn-mini btn-success add_brofist'><i class="icon-thumbs-up icon-white"></i></div>
-	  					<% end %>
-					 	<%if not Bitchslap.find_by_giver_id_and_post_id(session[:id], p.id)%>
-							<div post_id='<%=p.id%>' class='btn btn-mini btn-danger add_bitchslap'><i class="icon-thumbs-down icon-white"></i></div>
-						<% end %>
-					<%end%>
-					<br>
-					<% p.brofists.each do |bf|%>
-						<% if bf.giver_id == session[:id] %>
-							<small id='fist<%=bf.id%>' fist_id='<%=bf.id%>' class="fist_back btn btn-link">
-								Brofisted by: <%= User.find(bf.giver_id).name%>
-							</small>
-						<%else%>
-							<small>
-								Brofisted by: <%= User.find(bf.giver_id).name%>
-							</small>
-						<%end%>	
-					<%end%>
-					<% p.bitchslaps.each do |bs|%>
-						<% if bs.giver_id == session[:id] %>
-							<small id='slap<%=bs.id%>' slap_id='<%=bs.id%>' class="slap_back btn btn-link">
-								Bitchslapped by: <%= User.find(bs.giver_id).name%>
-							</small>
-						<%else%>
-							<small id='slap<%=bs.id%>' slap_id='<%=bs.id%>' class="slap_back btn btn-link">
-								Bitchslapped by: <%= User.find(bs.giver_id).name%>
-							</small>
-						<%end%>
-					<%end%>
-			    </div>
-			  </li>
+<div class='container'>
+	<div class='row'>
+		<div class='col-sm-12'>
+			<div class='page-header'>
+				<h1><%=@topic.name%></h1>
+				<a id='add_post' href="#myModal" role="button"  data-toggle="modal" class='btn btn-primary pull-right'></a>		
 			</div>
-			
-			<%end%>
-		</ul>
+			<div id='all_posts' class="thumbnails">
+				<%@posts.each do |p|%>
+
+				 <script>
+					$(function(){
+						var json = "<%= ActiveSupport::JSON.encode(p) %>".replace(/&quot;/g, "\"").replace(/\n/g, "<br>")
+						var post = $.parseJSON(json);
+						window['post'+post.id] = new Post(post);
+					})
+					
+				 </script>
+				<div class='post row' id='post<%=p.id%>'>
+				  <div class="col-sm-3 avatar">
+				    <div class="thumbnail">
+				      <img src="<%=p.user.img_src%>">
+				      <h3><%=p.user.name%></h3>
+				      <hr>
+				      <h6><%=p.user.posts.count%> posts <span class="glyphicon glyphicon-comment"></span> | </h6>
+				      <h6><%=p.user.brofists.count%> brofists <span class="glyphicon glyphicon-thumbs-up"></span> | </h6>
+				      <h6><%=p.user.bitchslaps.count%> bitchslaps <span class="glyphicon glyphicon-thumbs-down"></span></h6>
+				    </div>
+				  </div>
+				  <div class="col-sm-9">
+				    <div class="thumbnail post_content">
+				      <div class='post_content_text'><%=simple_format(p.content)%></div>
+				      <hr style='margin-bottom:5px!important;'>
+				      <small>
+				      	<%Time.zone = "Pacific Time (US & Canada)"%> 
+						<%= Time.zone.parse(p.created_at.to_s).strftime("%b %d %Y at %I:%M %p")%>
+				      </small>
+				      <% if p.user.id == session[:id] %>
+						<div post_id='<%=p.id%>' class='edit_post btn btn-link'>Edit</div>
+						<%end%>
+						 <% if p.user.id != session[:id] %>
+							<%if not Brofist.find_by_giver_id_and_post_id(session[:id], p.id)%>
+		  						<div post_id='<%=p.id%>' class='btn btn-sm btn-success add_brofist'><span class="glyphicon glyphicon-thumbs-up"></span></div>
+		  					<% end %>
+						 	<%if not Bitchslap.find_by_giver_id_and_post_id(session[:id], p.id)%>
+								<div post_id='<%=p.id%>' class='btn btn-sm btn-danger add_bitchslap'><span class="glyphicon glyphicon-thumbs-down"></span></div>
+							<% end %>
+						<%end%>
+						<br>
+						<% p.brofists.each do |bf|%>
+							<% if bf.giver_id == session[:id] %>
+								<small id='fist<%=bf.id%>' fist_id='<%=bf.id%>' class="fist_back btn btn-link">
+									Brofisted by: <%= User.find(bf.giver_id).name%>
+								</small>
+							<%else%>
+								<small>
+									Brofisted by: <%= User.find(bf.giver_id).name%>
+								</small>
+							<%end%>	
+						<%end%>
+						<% p.bitchslaps.each do |bs|%>
+							<% if bs.giver_id == session[:id] %>
+								<small id='slap<%=bs.id%>' slap_id='<%=bs.id%>' class="slap_back btn btn-link">
+									Bitchslapped by: <%= User.find(bs.giver_id).name%>
+								</small>
+							<%else%>
+								<small id='slap<%=bs.id%>' slap_id='<%=bs.id%>' class="slap_back btn btn-link">
+									Bitchslapped by: <%= User.find(bs.giver_id).name%>
+								</small>
+							<%end%>
+						<%end%>
+				    </div>
+				  </div>
+				</div>
+				
+				<%end%>
+			</div>
+		</div>
 	</div>
 </div>
 
 <!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class='modal-dialog'>
+  <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Create New Post</h3>
+    <h4 id="myModalLabel" class='modal-title'>Create New Post</h4>
   </div>
   <div class="modal-body">
-    <p><textarea id='post' placeholder='Type your post here...'></textarea></p>
+  	<div class="form-group">
+    	<textarea id='post' class='form-control' placeholder='Type your post here...'></textarea>
+    </div>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button id='submit_post' class="btn btn-primary" thread_id='<%=@topic.id%>'>Create Post</button>
   </div>
+  </div>
+  </div>
 </div>
 
-<div id="editPost" class="modal hide fade">
+<div id="editPost" class="modal">
+ <div class='modal-dialog'>
+  <div class="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Edit your Post</h3>
+    <h4 class='modal-title'>Edit your Post</h4>
   </div>
   <div class="modal-body">
-    <p><textarea id='post_edit'></textarea></p>
+  	<div class="form-group">
+    	<textarea id='post_edit' class='form-control'></textarea>
+    </div>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button id='edit_post_btn' class="btn btn-primary">Edit Post</button>
+  </div>
+  </div>
   </div>
 </div>

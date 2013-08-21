@@ -2,8 +2,8 @@ class TopicsController < ApplicationController
 	def index
 		@topic = Topic.find(params[:id])
 		@posts = @topic.posts.all
-		@topic.views = @topic.views + 1
-		@topic.save
+		@topic.update_column('views', @topic.views + 1)
+		#@topic.save
 	end
 
 	def create_post
@@ -20,7 +20,12 @@ class TopicsController < ApplicationController
 
 	    post = topic.posts.create(:content => content, :user_id => user_id)   
 
+	    topic.post_num = topic.posts.count
+
+	    topic.save
+
 	    Time.zone = 'Pacific Time (US & Canada)' 
+
 		post_date = Time.zone.parse(post.created_at.to_s).strftime("%b %d %Y at %I:%M %p") 
 
 	    render(:json => {:success => true, :user => user, :post => post, :post_date => post_date})

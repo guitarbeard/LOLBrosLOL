@@ -3,6 +3,6 @@ class Topic < ActiveRecord::Base
 	belongs_to :user
 	has_many :posts
 
-	attr_accessible :name, :user_id 
+	attr_accessible :name, :user_id, :post_num
 	
 end
