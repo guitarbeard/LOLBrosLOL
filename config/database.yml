@@ -19,17 +19,6 @@ development:
   password: root
   socket: /Applications/MAMP/tmp/mysql/mysql.sock
 
-# development:
-#   host: 36d907dcd3e499d314010e0122c9e1fb45818d90.rackspaceclouddb.com
-#   adapter: mysql2
-#   encoding: utf8
-#   reconnect: false 
-#   database: alex
-#   pool: 5
-#   username: cookiepages
-#   password: hhRGZUrXNyymW5ykltmklcvyykrta8tvZIihXjyamvHiV
-#   socket: /var/run/mysqld/mysqld.sock
-
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
